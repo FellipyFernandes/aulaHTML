@@ -41,3 +41,9 @@ def nomesob():
   sobrenome = request.args.get('sobrenome')
   return f"""<h1> Sobrenome </h1>
   <p>{sobrenome},{nome}</p>"""
+
+def tabuada(num):
+   html="<ul>"
+   for i in range(1,11):
+      html+=f"<li> {num}*{i}={num*1}</li>"
+      return html
