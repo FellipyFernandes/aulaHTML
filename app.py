@@ -1,4 +1,4 @@
-from flask import (Flask, request) 
+from flask import (Flask, render_template, request) 
 
 app = Flask(__name__)
 
@@ -42,8 +42,7 @@ def nomesob():
   return f"""<h1> Sobrenome </h1>
   <p>{sobrenome},{nome}</p>"""
 
-def tabuada(num):
-   html="<ul>"
-   for i in range(1,11):
-      html+=f"<li> {num}*{i}={num*1}</li>"
-      return html
+@app.route("/tabuada/<int:numero>", methods=("GET", ))
+def tabuada(numero):
+  
+  return render_template('tabuada.html',numero=numero)
