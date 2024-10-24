@@ -42,7 +42,11 @@ def nomesob():
   return f"""<h1> Sobrenome </h1>
   <p>{sobrenome},{nome}</p>"""
 
-@app.route("/tabuada/<int:numero>", methods=("GET", ))
-def tabuada(numero):
-  
-  return render_template('tabuada.html',numero=numero)
+@app.route("/tabuada")
+@app.route("/tabuada/<numero>", methods=("GET", ))
+def tabuada(numero = None):
+
+  if 'numero' in request.args:
+     numero = int(request.args.get('numero'))
+
+  return render_template('tabuada.html', numero=numero)
