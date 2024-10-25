@@ -50,3 +50,25 @@ def tabuada(numero = None):
      numero = int(request.args.get('numero'))
 
   return render_template('tabuada.html', numero=numero)
+
+@app.route("/calculo")
+@app.route("/calculo/<numero>", methods=("GET", ))
+def juros_simples(numero = None):
+   
+  if 'valor' in request.args:
+     numero = int(request.args.get('numero'))
+
+  return render_template('calculoJuros.html', numero=numero)
+
+@app.route("/login", methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        senha = request.form['senha']
+        
+        if email == 'aluno@senai.br' and senha == 'senai':
+            return '<h1>Usuário logado com sucesso😁!</h1>'
+        else:
+            return '<h1>Email ou senha incorretos, tente novamente😔.</h1>'
+
+    return render_template('login.html')
