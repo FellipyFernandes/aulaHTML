@@ -107,3 +107,16 @@ def calcular_imc():
             return '<h1>Erro: Por favor insira valores válidos para peso e altura.</h1>'
     
     return render_template('calculoIMC.html')
+
+@app.route("/login", methods=('GET', 'POST'))
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        senha = request.form['senha']
+        
+        if email == 'aluno@senai.br' and senha == 'senai':
+            return '<h1>Usuário Logado com Sucesso!</h1>'
+        else:
+            return '<h1>Usuário ou senha incorretos. Tente novamente.</h1>'
+
+    return render_template('login.html')
