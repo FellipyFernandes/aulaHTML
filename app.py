@@ -51,24 +51,59 @@ def tabuada(numero = None):
 
   return render_template('tabuada.html', numero=numero)
 
-@app.route("/calculo")
-@app.route("/calculo/<numero>", methods=("GET", ))
-def juros_simples(numero = None):
-   
-  if 'valor' in request.args:
-     numero = int(request.args.get('numero'))
-
-  return render_template('calculoJuros.html', numero=numero)
-
-@app.route("/login", methods=('GET', 'POST'))
-def login():
+@app.route('/calculojuros', methods=['GET', 'POST'])
+def calculo_juros():
     if request.method == 'POST':
-        email = request.form['email']
-        senha = request.form['senha']
-        
-        if email == 'aluno@senai.br' and senha == 'senai':
-            return '<h1>Usuário logado com sucesso😁!</h1>'
-        else:
-            return '<h1>Email ou senha incorretos, tente novamente😔.</h1>'
+        try:
+            investimento_inicial = float(request.form['investimento_inicial'])
+            juros_ano = float(request.form['juros_ano'])
+            tempo_meses = int(request.form['tempo_meses'])
+            aporte_mensal = float(request.form['aporte_mensal'])
 
-    return render_template('login.html')
+            # Cálculo de juros
+            juros_mensal = juros_ano / 12 / 100
+            total = investimento_inicial
+
+            for _ in range(tempo_meses):
+                total += aporte_mensal
+                total *= (1 + juros_mensal)
+
+            return render_template('calculoJuros.html', total=total)
+        except ValueError:
+            return render_template('calculoJuros.html', error="Por favor, insira valores válidos.")
+
+    return render_template('calculoJuros.html')
+
+@app.route("/imc", methods=('GET', 'POST'))
+def calcular_imc():
+    if request.method == 'POST':
+        try:
+            peso = float(request.form['peso'])
+            altura = float(request.form['altura'])
+            imc = peso / (altura ** 2)
+
+            if imc < 18.5:
+                classificacao = 'Magreza'
+                grau_obesidade = 0
+            elif 18.5 <= imc <= 24.9:
+                classificacao = 'Normal'
+                grau_obesidade = 0
+            elif 25.0 <= imc <= 29.9:
+                classificacao = 'Sobrepeso'
+                grau_obesidade = 1
+            elif 30.0 <= imc <= 39.9:
+                classificacao = 'Obesidade'
+                grau_obesidade = 2
+            else:
+                classificacao = 'Obesidade Grave'
+                grau_obesidade = 3
+
+            return f'''
+                <h1>Seu IMC é: {imc:.2f}</h1>
+                <h2>Classificação: {classificacao}</h2>
+                <h2>Grau de Obesidade: {grau_obesidade}</h2>
+            '''
+        except ValueError:
+            return '<h1>Erro: Por favor insira valores válidos para peso e altura.</h1>'
+    
+    return render_template('calculoIMC.html')
